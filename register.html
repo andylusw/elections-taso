@@ -15,6 +15,7 @@
     <main>
         <h2>Registration Form for Elections in Taso Village</h2>
         <p>Please fill in the details below to register for the elections period. This form is intended for students residing in Taso village.</p>
+        <div id="message" style="display:none; color: #006400; font-weight: bold; margin-bottom: 20px;"></div>
         <form action="" method="get" onsubmit="return false;">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required><br><br>
@@ -39,6 +40,40 @@
     <script>
         const form = document.querySelector('form');
         const STORAGE_KEY = 'tasoElectionRegistrations';
+        const messageDiv = document.getElementById('message');
+
+        function disableForm() {
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.disabled = true;
+            });
+        }
+
+        function enableForm() {
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(input => {
+                if (input.type !== 'submit') {
+                    input.disabled = false;
+                }
+            });
+        }
+
+        // Check if already registered
+        function checkIfRegistered() {
+            const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            if (existing.length > 0) {
+                const lastReg = existing[existing.length - 1];
+                messageDiv.style.display = 'block';
+                messageDiv.textContent = `✓ Thank you! You have already registered. Your information is: ${lastReg.name} (${lastReg.phone})`;
+                disableForm();
+                form.querySelector('input[type="submit"]').disabled = true;
+                return true;
+            }
+            return false;
+        }
+
+        // Check on page load
+        window.addEventListener('load', checkIfRegistered);
 
         form.addEventListener('submit', function(event) {
             event.preventDefault();
@@ -60,8 +95,10 @@
             existing.push(data);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
 
-            alert('Registration saved locally. Thank you!');
-            form.reset();
+            messageDiv.style.display = 'block';
+            messageDiv.textContent = '✓ Registration successful! Thank you for registering.';
+            disableForm();
+            form.querySelector('input[type="submit"]').disabled = true;
         });
     </script>
     <footer>
