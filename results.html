@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Results - Taso Village Elections</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <img src="IMG_20250498_181848635.png" alt="Mbarara University of Science and Technology Logo" style="max-width: 150px; height: auto;">
+        <h1>Mbarara University of Science and Technology</h1>
+        <p>SUCCEED WE MUST</p>
+    </header>
+    <main>
+        <h2>Registered Students - Taso Village Elections</h2>
+        <p>This page reads registration entries from local storage.</p>
+
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Reg Number</th>
+                    <th>Gender</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <button id="clearData">Clear all data</button>
+        <p><a href="register.html">Back to registration</a></p>
+    </main>
+    <script>
+        const STORAGE_KEY = 'tasoElectionRegistrations';
+        const tableBody = document.querySelector('#resultsTable tbody');
+        const clearButton = document.getElementById('clearData');
+
+        function render() {
+            const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            tableBody.innerHTML = '';
+
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6">No registrations found.</td></tr>';
+                return;
+            }
+
+            data.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${row.name}</td>
+                    <td>${row.phone}</td>
+                    <td>${row.regnum}</td>
+                    <td>${row.gender}</td>
+                    <td>${new Date(row.timestamp).toLocaleString()}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        clearButton.addEventListener('click', () => {
+            if (confirm('Clear all stored registrations?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                render();
+            }
+        });
+
+        render();
+    </script>
+</body>
+</html>
