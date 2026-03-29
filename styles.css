@@ -32,6 +32,26 @@ header p {
     font-style: italic;
 }
 
+header nav {
+    margin-top: 20px;
+}
+
+.register-btn {
+    display: inline-block;
+    background-color: #FFD700;
+    color: #006400;
+    padding: 12px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: background-color 0.3s;
+}
+
+.register-btn:hover {
+    background-color: #FFC700;
+}
+
 main {
     max-width: 800px;
     margin: 0 auto;
