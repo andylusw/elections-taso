@@ -15,7 +15,8 @@
     <main>
         <h2>Registration Form for Elections in Taso Village</h2>
         <p>Please fill in the details below to register for the elections period. This form is intended for students residing in Taso village.</p>
-        <form action="#" method="post">
+        <p><strong>Admin:</strong> <a href="results.html" target="_blank">View registrations</a></p>
+        <form action="javascript:void(0)" method="get">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required><br><br>
             
@@ -36,6 +37,34 @@
             <input type="submit" value="Register">
         </form>
     </main>
+    <script>
+        const form = document.querySelector('form');
+        const STORAGE_KEY = 'tasoElectionRegistrations';
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const data = {
+                name: document.getElementById('name').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                regnum: document.getElementById('regnum').value.trim(),
+                gender: document.querySelector('input[name="gender"]:checked')?.value || '',
+                timestamp: new Date().toISOString()
+            };
+
+            if (!data.name || !data.phone || !data.regnum || !data.gender) {
+                alert('Please complete all fields before submitting.');
+                return;
+            }
+
+            const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            existing.push(data);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+
+            alert('Registration saved locally. Thank you!');
+            form.reset();
+        });
+    </script>
     <footer>
         <p>Mbarara University of Science and Technology<br>
         P.O. BOX 1410, Mbarara, Uganda<br>
